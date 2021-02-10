@@ -1,0 +1,33 @@
+package com.example.botnavc.network.DTO.config
+
+data class ConfigResponse(
+    val UTC: String,
+    val apiversion: String,
+    val backup: Backup,
+    val bridgeid: String,
+    val datastoreversion: String,
+    val dhcp: Boolean,
+    val factorynew: Boolean,
+    val gateway: String,
+    val internetservices: Internetservices,
+    val ipaddress: String,
+    val linkbutton: Boolean,
+    val localtime: String,
+    val mac: String,
+    val modelid: String,
+    val name: String,
+    val netmask: String,
+    val portalconnection: String,
+    val portalservices: Boolean,
+    val portalstate: Portalstate,
+    val proxyaddress: String,
+    val proxyport: Int,
+    val replacesbridgeid: Any,
+    val starterkitid: String,
+    val swupdate: Swupdate,
+    val swupdate2: Swupdate2,
+    val swversion: String,
+    val timezone: String,
+    val whitelist: Map<String, Map<String, String>>,
+    val zigbeechannel: Int
+)
