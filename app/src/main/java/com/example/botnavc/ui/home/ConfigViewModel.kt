@@ -7,6 +7,7 @@ import com.example.botnavc.domain.model.Config
 import com.example.botnavc.repository.ConfigEvent
 import com.example.botnavc.repository.ConfigRepository
 import com.example.botnavc.repository.MyDataState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,10 +23,10 @@ constructor(
 
     private val _config: MutableLiveData<MyDataState<Config>> = MutableLiveData()
     val config: LiveData<MyDataState<Config>>
-        get() = _config
+        = _config
 
     fun setConfigEvent(configEvent: ConfigEvent) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             when (configEvent) {
                 is ConfigEvent.GetConfigEvent -> {
                     repository.get()
@@ -35,7 +36,7 @@ constructor(
                         .launchIn(viewModelScope)
                 }
                 is ConfigEvent.None -> {
-
+                    // who cares
                 }
             }
         }
@@ -43,5 +44,3 @@ constructor(
 
 
 }
-
-

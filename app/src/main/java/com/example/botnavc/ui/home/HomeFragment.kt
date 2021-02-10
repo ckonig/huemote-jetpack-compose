@@ -7,9 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.botnavc.databinding.FragmentHomeBinding
 import com.example.botnavc.domain.model.Config
@@ -22,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private val viewModel: ConfigViewModel by viewModels()
+
     private var _binding: FragmentHomeBinding? = null
 
     // This property is only valid between onCreateView and
@@ -35,7 +41,7 @@ class HomeFragment : Fragment() {
             when (data) {
                 is MyDataState.Success<Config> -> {
                     data.data
-                    Log.d("observing data",  "success yay")
+                    Log.d("observing data", "success yay")
                 }
                 is MyDataState.Error -> {
                     Log.d("observing data", "oh no error");
@@ -49,34 +55,14 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-
+        val observed = viewModel.config.value;
         return ComposeView(requireContext()).apply {
             setContent {
-                Column() {
-                    Text("Data view")
-                    when(viewModel.config.value) {
-                        is MyDataState.Success<Config> -> {
-                            val conf = (viewModel.config.value as MyDataState.Success<Config>).data
-                            Column() {
-                                ConfigView(config = conf)
-                            }
-                        }
-                        is MyDataState.Error -> {
-                            val conf = (viewModel.config.value as MyDataState.Error).exception
-                            Column() {
-                                Text( "${conf.message}" )
-                                Text(  "oh no error")
-                            }
-                        }
-                        is MyDataState.Loading -> {
-                            Text( "is loading...")
-                        }
-                    }
-                }
+                ConfigView()
             }
         }
     }
